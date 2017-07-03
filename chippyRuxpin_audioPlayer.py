@@ -6,40 +6,26 @@
 #!/usr/bin/env python
 #
 
-import alsaaudio as aa
-import audioop
 from time import sleep
-import struct
 import math
 import array
-import numpy as np
 import wave
 import os
 import subprocess
 
 class AudioPlayer:
     def __init__(self):
-        subprocess.Popen('amixer cset numid=1 100%' ,shell=True, stdout=subprocess.PIPE ) # Set PA mixer volume to 100%
-        subprocess.Popen('amixer cset numid=2 2' ,shell=True, stdout=subprocess.PIPE ) # Set right mixer to be "right" (2)
-        subprocess.Popen('amixer cset numid=3 1' ,shell=True, stdout=subprocess.PIPE ) # Set left mixer to be "left" (1)
-        subprocess.Popen('amixer cset numid=4 1' ,shell=True, stdout=subprocess.PIPE ) # Set DAC self.output to be "Direct" (2... or 1 for "Mixed" if you prefer)
         self.prevAudiovalue = 0
         self.mouthValue = 0
         
     def play(self,fileName):
         # Initialise matrix
-        matrix=[0,0,0,0,0,0,0,0]
+        matrix=[0,0,0,0,0,0,0,0] #makes a matrix
 
         # Set up audio
-        wavfile = wave.open(fileName,'r')
-        chunk = 1024
-        output = aa.PCM(aa.PCM_PLAYBACK, aa.PCM_NORMAL)
-        output.setchannels(1)
-        output.setrate(22050)
-        output.setformat(aa.PCM_FORMAT_S16_LE)
-        output.setperiodsize(chunk)
-
-        data = wavfile.readframes(chunk)
+        wavfile = wave.open(fileName,'r') #opens the wav file and sets it to read mode
+        chunk = 1024 #creates a variable with a value of 1024
+        data = wavfile.readframes(chunk) #reads the wav file and creates a variable with those values. although it will  
         try:
           while data!='':
              output.write(data)
